@@ -10,7 +10,6 @@
       <mat-card-content>
         <div class="file-input-container">
           <input
-            #idImage
             (change)="idCardImageChange($event)"
             type="file"
             accept="image/*"
@@ -32,7 +31,6 @@
       <mat-card-content>
         <div class="file-input-container">
           <input
-            #profileImage
             (change)="profileImageChange($event)"
             type="file"
             accept="image/*"
@@ -47,7 +45,7 @@
     </mat-card>
   </div>
   <mat-card class="results" *ngIf="likeness">
-    <h4 class="mat-h1">Images {{ likeness < 0.5 ? "" : "Doesn't" }} Match</h4>
+    <h4 class="mat-h1">Faces {{ likeness > 0.5 ? "Doesn't" : "" }} Match</h4>
     <h4 [ngClass]="{ match: likeness <= 0.5, nomatch: likeness > 0.5 }">
       Likeness: {{ likeness }}
     </h4>
