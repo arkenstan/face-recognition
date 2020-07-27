@@ -1,0 +1,9 @@
+.container {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  justify-content: center;
+  .text {
+    margin: 10px;
+  }
+}
