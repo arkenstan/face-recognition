@@ -1,0 +1,36 @@
+@import "layouts/basics";
+@import "layouts/forms";
+.container {
+  @extend %absolution;
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+  .image-form-container {
+    display: flex;
+    flex-flow: row;
+    overflow: hidden;
+    .form-layout {
+      max-width: 350px;
+      margin: 10px;
+    }
+    .file-input-container {
+      @extend %fileInputControl;
+    }
+    .image-preview {
+      max-height: 250px;
+      max-width: 250px;
+      margin: 10px;
+    }
+  }
+  .results {
+    text-align: center;
+    min-width: 350px;
+    .match {
+      background-color: #0f0;
+    }
+    .nomatch {
+      background-color: #f00;
+      color: #fff;
+    }
+  }
+}

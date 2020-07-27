@@ -1,1 +1,55 @@
-<p>main works!</p>
+<div class="container">
+  <div class="image-form-container" [formGroup]="imageForm">
+    <mat-card class="form-layout">
+      <mat-card-header>
+        <mat-card-title>Identity Card</mat-card-title>
+        <mat-card-subtitle
+          >Please select your Passport or Aadhar card</mat-card-subtitle
+        >
+      </mat-card-header>
+      <mat-card-content>
+        <div class="file-input-container">
+          <input
+            #idImage
+            (change)="idCardImageChange($event)"
+            type="file"
+            accept="image/*"
+            formControlName="idCardImage"
+          />
+          <button mat-raised-button color="primary">
+            Select ID Card Image
+          </button>
+        </div>
+        <img class="image-preview" [src]="images.identity" />
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="form-layout">
+      <mat-card-header>
+        <mat-card-title>Profile Image</mat-card-title>
+        <mat-card-subtitle>Please select a Profile Image</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="file-input-container">
+          <input
+            #profileImage
+            (change)="profileImageChange($event)"
+            type="file"
+            accept="image/*"
+            formControlName="profileImage"
+          />
+          <button mat-raised-button color="primary">
+            Select Profile Image
+          </button>
+        </div>
+        <img class="image-preview" [src]="images.profile" />
+      </mat-card-content>
+    </mat-card>
+  </div>
+  <mat-card class="results" *ngIf="likeness">
+    <h4 class="mat-h1">Images {{ likeness < 0.5 ? "" : "Doesn't" }} Match</h4>
+    <h4 [ngClass]="{ match: likeness <= 0.5, nomatch: likeness > 0.5 }">
+      Likeness: {{ likeness }}
+    </h4>
+  </mat-card>
+</div>
