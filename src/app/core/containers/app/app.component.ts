@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Observable, Subject } from 'rxjs';
 
 import {
   NotificationService,
@@ -12,14 +12,17 @@ import {
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   title = 'face-recognition';
-  notification$: Observable<Notification>;
+  notification$: Subject<Notification>;
 
   constructor(
-    private notification: NotificationService,
+    private notificationService: NotificationService,
     private _snackBar: MatSnackBar
-  ) {
+  ) {}
+
+  ngOnInit(): void {
+    this.notification$ = this.notificationService.getNotification();
     this.notification$.subscribe((res) => {
       this.openSnackBar(res);
     });

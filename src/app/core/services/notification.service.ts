@@ -11,13 +11,15 @@ export interface Notification {
 })
 export class NotificationService {
   notification: Subject<Notification>;
-  constructor() {}
+  constructor() {
+    this.notification = new Subject();
+  }
 
-  notify(data: Notification) {
+  public notify(data: Notification) {
     this.notification.next(data);
   }
 
-  getNotification() {
+  public getNotification() {
     return this.notification;
   }
 }
