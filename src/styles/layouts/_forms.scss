@@ -1,0 +1,10 @@
+@import "layouts/basics";
+
+%fileInputControl {
+  position: relative;
+  input[type="file"] {
+    @extend %absolution;
+    z-index: 10;
+    opacity: 0;
+  }
+}
