@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import * as faceApi from 'face-api.js';
 
+import { NotificationService } from 'src/app/core/services/notification.service';
+
 @Injectable({
   providedIn: 'root',
 })
@@ -11,7 +13,10 @@ export class FaceapiService {
   private identityCardDescriptor: Float32Array | number[];
   private selfieDescriptor: any;
 
-  constructor() {}
+  inputSize = 512;
+  scoreThreshold = 0.5;
+
+  constructor(private notificationService: NotificationService) {}
 
   async loadModels() {
     await this._faceApi.loadFaceLandmarkModel(this.weightURI);
@@ -24,28 +29,48 @@ export class FaceapiService {
   }
 
   async detectFaces(input: string) {
-    const inputSize = 512;
-    const scoreThreshold = 0.5;
     let faceApiInput = await this.fetchImage(input);
-
     let faceDetectorOptions = new this._faceApi.TinyFaceDetectorOptions({
-      inputSize,
-      scoreThreshold,
+      inputSize: this.inputSize,
+      scoreThreshold: this.scoreThreshold,
     });
-
     let result = await this._faceApi
       .detectAllFaces(faceApiInput, faceDetectorOptions)
       .withFaceLandmarks()
       .withFaceDescriptors();
-
-    this.identityCardDescriptor = result[0].descriptor;
+    return result;
   }
 
-  async faceDescriptor(input: string) {
-    let faceApiInput = await this.fetchImage(input);
-    this.selfieDescriptor = await this._faceApi.computeFaceDescriptor(
-      faceApiInput
-    );
+  async calculateIdentityDescriptor(input: string) {
+    let faces = await this.detectFaces(input);
+    let isSuccess = false;
+    if (faces && faces.length > 0) {
+      this.identityCardDescriptor = faces[0].descriptor;
+      isSuccess = true;
+    } else {
+      this.notificationService.notify({
+        message: 'No Face detected. Please use a better image',
+        level: 'error',
+      });
+      isSuccess = false;
+    }
+    return isSuccess;
+  }
+
+  async calculateProfileDescriptor(input: string) {
+    let faces = await this.detectFaces(input);
+    let isSuccess = false;
+    if (faces && faces.length > 0) {
+      this.selfieDescriptor = faces[0].descriptor;
+      isSuccess = true;
+    } else {
+      this.notificationService.notify({
+        message: 'No Face Detected. Please use a better image',
+        level: 'error',
+      });
+      isSuccess = false;
+    }
+    return isSuccess;
   }
 
   async computeLikeness() {
